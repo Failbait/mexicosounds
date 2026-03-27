@@ -8,6 +8,7 @@ const copyResourcesPlugin = {
     if (!existsSync('resources')) return
     mkdirSync('dist/resources', { recursive: true })
     for (const file of readdirSync('resources')) {
+      if (file.startsWith('.')) continue
       copyFileSync(`resources/${file}`, `dist/resources/${file}`)
       console.log(`  copied: ${file}`)
     }
