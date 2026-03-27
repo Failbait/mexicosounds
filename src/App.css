@@ -1,0 +1,466 @@
+@import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,400&display=swap");
+
+/* ─── tokens ─────────────────────────────────────────── */
+:root {
+  --bg: #0c0907;
+  --surf: #181210;
+  --surf2: #231a15;
+  --surf3: #2e2219;
+  --red: #d93b2e;
+  --amber: #e07a30;
+  --gold: #f0be3a;
+  --green: #3ecf8e;
+  --text: #f0e6db;
+  --muted: #6a5548;
+  --radius: 14px;
+}
+
+/* ─── reset / base ───────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body,
+#root {
+  min-height: 100vh;
+  background: var(--bg);
+}
+
+body {
+  font-family: "DM Sans", sans-serif;
+  color: var(--text);
+  display: flex;
+  justify-content: center;
+  /* subtle warm radial glow in corner */
+  background-image:
+    radial-gradient(
+      ellipse 60% 40% at 15% 10%,
+      rgba(217, 59, 46, 0.06) 0%,
+      transparent 70%
+    ),
+    radial-gradient(
+      ellipse 50% 30% at 85% 90%,
+      rgba(240, 190, 58, 0.04) 0%,
+      transparent 70%
+    );
+}
+
+#root {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+/* ─── app shell ──────────────────────────────────────── */
+.app {
+  width: 100%;
+  max-width: 460px;
+  padding: 52px 20px 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px;
+}
+
+/* ─── header ─────────────────────────────────────────── */
+header {
+  text-align: center;
+}
+
+.wordmark {
+  font-family: "Bebas Neue", sans-serif;
+  font-size: clamp(20px, 8vw, 78px);
+  line-height: 0.88;
+  letter-spacing: 3px;
+  white-space: nowrap;
+  color: var(--red);
+}
+.wordmark span {
+  display: block;
+  text-align: center;
+  color: var(--gold);
+}
+
+.sub {
+  margin-top: 10px;
+  font-size: 11px;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* ─── ring ───────────────────────────────────────────── */
+.ring-wrap {
+  position: relative;
+  width: 260px;
+  height: 260px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ring-wrap svg {
+  position: absolute;
+  inset: 0;
+}
+
+.ring-inner {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}
+
+.countdown {
+  font-family: "Bebas Neue", sans-serif;
+  font-size: 68px;
+  letter-spacing: 6px;
+  line-height: 1;
+  color: var(--gold);
+}
+
+.cdown-label {
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* flash state inside ring */
+.ring-flash-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  animation: popIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+.big-emoji {
+  font-size: 64px;
+  line-height: 1;
+}
+.flash-name {
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  color: var(--gold);
+}
+
+@keyframes popIn {
+  from {
+    transform: scale(0.3);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* outer glow when a sound fires */
+.ring-flash::before {
+  content: "";
+  position: absolute;
+  inset: -20px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(240, 190, 58, 0.18) 0%,
+    transparent 70%
+  );
+  animation: glowPulse 0.6s ease-out both;
+  pointer-events: none;
+}
+
+@keyframes glowPulse {
+  from {
+    opacity: 1;
+    transform: scale(0.7);
+  }
+  to {
+    opacity: 0;
+    transform: scale(1.3);
+  }
+}
+
+/* ─── buttons ────────────────────────────────────────── */
+.btns {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.btn-main {
+  font-family: "Bebas Neue", sans-serif;
+  font-size: 22px;
+  letter-spacing: 3px;
+  padding: 13px 44px 11px;
+  border-radius: 100px;
+  border: none;
+  background: var(--red);
+  color: #fff;
+  cursor: pointer;
+  transition:
+    background 0.2s,
+    transform 0.15s,
+    box-shadow 0.2s;
+}
+.btn-main:hover:not(:disabled) {
+  background: var(--amber);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(217, 59, 46, 0.35);
+}
+.btn-main:active:not(:disabled) {
+  transform: translateY(0);
+}
+.btn-main.pausing {
+  background: var(--surf3);
+  color: var(--muted);
+}
+.btn-main:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.btn-ghost {
+  padding: 13px 18px;
+  border-radius: 100px;
+  border: 1px solid var(--surf3);
+  background: transparent;
+  color: var(--muted);
+  font-family: "DM Sans", sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition:
+    border-color 0.2s,
+    color 0.2s,
+    background 0.2s;
+  white-space: nowrap;
+}
+.btn-ghost:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+  background: rgba(240, 190, 58, 0.05);
+}
+
+/* ─── settings panel ─────────────────────────────────── */
+.panel {
+  width: 100%;
+  background: var(--surf);
+  border: 1px solid var(--surf2);
+  border-radius: var(--radius);
+  padding: 22px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.panel-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.plabel {
+  font-size: 12px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--muted);
+  min-width: 64px;
+}
+
+/* interval inputs */
+.interval-inputs {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.numinput {
+  width: 64px;
+  padding: 7px 10px;
+  background: var(--surf2);
+  border: 1px solid var(--surf3);
+  border-radius: 8px;
+  color: var(--text);
+  font-family: "DM Sans", sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  text-align: center;
+  outline: none;
+  transition: border-color 0.2s;
+  -moz-appearance: textfield;
+}
+.numinput::-webkit-inner-spin-button,
+.numinput::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+}
+.numinput:focus {
+  border-color: var(--red);
+}
+
+.dash {
+  color: var(--muted);
+  font-size: 16px;
+}
+.unit {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+/* volume row */
+.vol-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+}
+
+.slider {
+  flex: 1;
+  -webkit-appearance: none;
+  appearance: none;
+  height: 4px;
+  border-radius: 100px;
+  outline: none;
+  cursor: pointer;
+  background: linear-gradient(
+    to right,
+    var(--red) 0%,
+    var(--red) var(--pct, 70%),
+    var(--surf3) var(--pct, 70%)
+  );
+}
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--text);
+  cursor: pointer;
+  transition: transform 0.15s;
+}
+.slider::-webkit-slider-thumb:hover {
+  transform: scale(1.25);
+}
+.slider::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--text);
+  border: none;
+  cursor: pointer;
+}
+
+.vol-val {
+  font-size: 12px;
+  color: var(--muted);
+  min-width: 36px;
+  text-align: right;
+}
+
+/* ─── last played bar ────────────────────────────────── */
+.last-row {
+  width: 100%;
+  background: var(--surf);
+  border: 1px solid var(--surf2);
+  border-left: 3px solid var(--red);
+  border-radius: var(--radius);
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 52px;
+}
+
+.lp-tag {
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--muted);
+  flex-shrink: 0;
+}
+
+.lp-left {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.lp-name {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text);
+}
+
+.lp-since {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 3px;
+  flex-shrink: 0;
+}
+
+.lp-since-val {
+  font-family: "Bebas Neue", sans-serif;
+  font-size: 28px;
+  letter-spacing: 2px;
+  line-height: 1;
+  color: var(--amber);
+}
+
+/* ─── sound chips ────────────────────────────────────── */
+.sounds-section {
+  width: 100%;
+}
+
+.sounds-header {
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--muted);
+  text-align: center;
+  margin-bottom: 14px;
+}
+
+.sounds-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  justify-content: center;
+}
+
+.chip {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 12px;
+  background: var(--surf);
+  border: 1px solid var(--surf2);
+  border-radius: 100px;
+  font-size: 12px;
+  color: var(--muted);
+  transition:
+    border-color 0.15s,
+    color 0.15s,
+    background 0.15s;
+}
+.chip:hover {
+  border-color: var(--surf3);
+  color: var(--text);
+}
+.chip-lit {
+  border-color: var(--gold) !important;
+  color: var(--gold) !important;
+  background: rgba(240, 190, 58, 0.07) !important;
+}
